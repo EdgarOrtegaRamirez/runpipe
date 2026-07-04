@@ -14,11 +14,11 @@ import (
 
 // Engine orchestrates pipeline execution.
 type Engine struct {
-	pipeline  *models.Pipeline
-	dag       *scheduler.DAG
-	executor  *executor.Executor
-	reporter  *reporter.Reporter
-	workers   int
+	pipeline *models.Pipeline
+	dag      *scheduler.DAG
+	executor *executor.Executor
+	reporter *reporter.Reporter
+	workers  int
 }
 
 // NewEngine creates a new pipeline engine.

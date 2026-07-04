@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/EdgarOrtegaRamirez/runpipe/pkg/executor"
 	"github.com/EdgarOrtegaRamirez/runpipe/pkg/engine"
+	"github.com/EdgarOrtegaRamirez/runpipe/pkg/executor"
 	"github.com/EdgarOrtegaRamirez/runpipe/pkg/parser"
 	"github.com/EdgarOrtegaRamirez/runpipe/pkg/reporter"
 	"github.com/spf13/cobra"
 )
 
 var (
-	flagFormat   string
-	flagWorkers  int
-	flagDryRun   bool
-	flagVerbose  bool
-	flagSetVar   []string
-	flagWorkDir  string
+	flagFormat  string
+	flagWorkers int
+	flagDryRun  bool
+	flagVerbose bool
+	flagSetVar  []string
+	flagWorkDir string
 )
 
 // NewRootCmd creates the root CLI command.

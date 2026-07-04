@@ -17,10 +17,10 @@ import (
 
 // Executor runs individual pipeline steps.
 type Executor struct {
-	WorkDir  string
-	Timeout  time.Duration
-	Stdout   io.Writer
-	Stderr   io.Writer
+	WorkDir string
+	Timeout time.Duration
+	Stdout  io.Writer
+	Stderr  io.Writer
 }
 
 // New creates a new Executor with the given working directory.

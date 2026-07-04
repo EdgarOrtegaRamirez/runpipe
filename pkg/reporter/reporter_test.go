@@ -106,9 +106,9 @@ func TestReporterJSON(t *testing.T) {
 
 func TestFormatDuration(t *testing.T) {
 	tests := []struct {
-		name  string
-		dur   float64
-		want  string
+		name string
+		dur  float64
+		want string
 	}{
 		{"milliseconds", 0.001, "1ms"},
 		{"seconds", 1.5, "1.5s"},

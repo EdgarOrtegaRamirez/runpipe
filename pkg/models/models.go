@@ -20,23 +20,23 @@ type Pipeline struct {
 
 // Step represents a single step in the pipeline.
 type Step struct {
-	ID          string            `yaml:"id" json:"id"`
-	Name        string            `yaml:"name" json:"name"`
-	Type        string            `yaml:"type" json:"type"` // shell, http, script
-	Command     string            `yaml:"command,omitempty" json:"command,omitempty"`
-	URL         string            `yaml:"url,omitempty" json:"url,omitempty"`
-	Method      string            `yaml:"method,omitempty" json:"method,omitempty"`
-	Headers     map[string]string `yaml:"headers,omitempty" json:"headers,omitempty"`
-	Body        string            `yaml:"body,omitempty" json:"body,omitempty"`
-	Script      string            `yaml:"script,omitempty" json:"script,omitempty"`
-	Depends     []string          `yaml:"depends,omitempty" json:"depends,omitempty"`
-	When        string            `yaml:"when,omitempty" json:"when,omitempty"`
-	Retry       *RetryConfig      `yaml:"retry,omitempty" json:"retry,omitempty"`
-	Timeout     string            `yaml:"timeout,omitempty" json:"timeout,omitempty"`
-	Artifacts   []string          `yaml:"artifacts,omitempty" json:"artifacts,omitempty"`
-	Env         map[string]string `yaml:"env,omitempty" json:"env,omitempty"`
-	WorkingDir  string            `yaml:"working_dir,omitempty" json:"working_dir,omitempty"`
-	Parallel    bool              `yaml:"parallel,omitempty" json:"parallel,omitempty"`
+	ID         string            `yaml:"id" json:"id"`
+	Name       string            `yaml:"name" json:"name"`
+	Type       string            `yaml:"type" json:"type"` // shell, http, script
+	Command    string            `yaml:"command,omitempty" json:"command,omitempty"`
+	URL        string            `yaml:"url,omitempty" json:"url,omitempty"`
+	Method     string            `yaml:"method,omitempty" json:"method,omitempty"`
+	Headers    map[string]string `yaml:"headers,omitempty" json:"headers,omitempty"`
+	Body       string            `yaml:"body,omitempty" json:"body,omitempty"`
+	Script     string            `yaml:"script,omitempty" json:"script,omitempty"`
+	Depends    []string          `yaml:"depends,omitempty" json:"depends,omitempty"`
+	When       string            `yaml:"when,omitempty" json:"when,omitempty"`
+	Retry      *RetryConfig      `yaml:"retry,omitempty" json:"retry,omitempty"`
+	Timeout    string            `yaml:"timeout,omitempty" json:"timeout,omitempty"`
+	Artifacts  []string          `yaml:"artifacts,omitempty" json:"artifacts,omitempty"`
+	Env        map[string]string `yaml:"env,omitempty" json:"env,omitempty"`
+	WorkingDir string            `yaml:"working_dir,omitempty" json:"working_dir,omitempty"`
+	Parallel   bool              `yaml:"parallel,omitempty" json:"parallel,omitempty"`
 }
 
 // RetryConfig specifies retry behavior for a step.
@@ -50,12 +50,12 @@ type RetryConfig struct {
 type StepStatus string
 
 const (
-	StatusPending  StepStatus = "pending"
-	StatusRunning  StepStatus = "running"
-	StatusSuccess  StepStatus = "success"
-	StatusFailed   StepStatus = "failed"
-	StatusSkipped  StepStatus = "skipped"
-	StatusRetry    StepStatus = "retry"
+	StatusPending StepStatus = "pending"
+	StatusRunning StepStatus = "running"
+	StatusSuccess StepStatus = "success"
+	StatusFailed  StepStatus = "failed"
+	StatusSkipped StepStatus = "skipped"
+	StatusRetry   StepStatus = "retry"
 )
 
 // StepResult holds the result of executing a step.
@@ -73,14 +73,14 @@ type StepResult struct {
 
 // PipelineResult holds the overall result of running a pipeline.
 type PipelineResult struct {
-	PipelineName string      `json:"pipeline_name"`
-	Status       StepStatus  `json:"status"`
+	PipelineName string       `json:"pipeline_name"`
+	Status       StepStatus   `json:"status"`
 	Results      []StepResult `json:"results"`
-	StartedAt    time.Time   `json:"started_at"`
-	EndedAt      time.Time   `json:"ended_at"`
-	Duration     float64     `json:"duration"`
-	TotalSteps   int         `json:"total_steps"`
-	PassedSteps  int         `json:"passed_steps"`
-	FailedSteps  int         `json:"failed_steps"`
-	SkippedSteps int         `json:"skipped_steps"`
+	StartedAt    time.Time    `json:"started_at"`
+	EndedAt      time.Time    `json:"ended_at"`
+	Duration     float64      `json:"duration"`
+	TotalSteps   int          `json:"total_steps"`
+	PassedSteps  int          `json:"passed_steps"`
+	FailedSteps  int          `json:"failed_steps"`
+	SkippedSteps int          `json:"skipped_steps"`
 }

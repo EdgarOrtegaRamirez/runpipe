@@ -15,8 +15,8 @@ import (
 type Format string
 
 const (
-	FormatText   Format = "text"
-	FormatJSON   Format = "json"
+	FormatText    Format = "text"
+	FormatJSON    Format = "json"
 	FormatCompact Format = "compact"
 )
 

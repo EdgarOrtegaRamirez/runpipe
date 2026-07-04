@@ -19,6 +19,7 @@ type Engine struct {
 	executor *executor.Executor
 	reporter *reporter.Reporter
 	workers  int
+	mu       sync.Mutex // protects result counters and slices
 }
 
 // NewEngine creates a new pipeline engine.
@@ -78,11 +79,13 @@ func (e *Engine) Run() *models.PipelineResult {
 				for id := range e.dag.Steps {
 					if _, ok := allDone[id]; !ok {
 						md.MarkDone(id, models.StatusSkipped)
+						e.mu.Lock()
 						result.SkippedSteps++
 						result.Results = append(result.Results, models.StepResult{
 							StepID: id,
 							Status: models.StatusSkipped,
 						})
+						e.mu.Unlock()
 					}
 				}
 				break
@@ -154,7 +157,9 @@ func (e *Engine) runStep(id string, md *scheduler.MutexDAG, env map[string]strin
 	if step.When != "" {
 		if !executor.EvaluateCondition(step.When, env) {
 			md.MarkDone(id, models.StatusSkipped)
+			e.mu.Lock()
 			result.SkippedSteps++
+			e.mu.Unlock()
 			return
 		}
 	}
@@ -198,6 +203,8 @@ func (e *Engine) runStep(id string, md *scheduler.MutexDAG, env map[string]strin
 	}
 
 	e.reporter.StepCompleted(lastResult)
+
+	e.mu.Lock()
 	result.Results = append(result.Results, *lastResult)
 
 	if lastResult.Status == models.StatusSuccess {
@@ -207,4 +214,5 @@ func (e *Engine) runStep(id string, md *scheduler.MutexDAG, env map[string]strin
 		md.MarkDone(id, models.StatusFailed)
 		result.FailedSteps++
 	}
+	e.mu.Unlock()
 }

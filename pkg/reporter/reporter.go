@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/EdgarOrtegaRamirez/runpipe/pkg/models"
@@ -24,6 +25,7 @@ const (
 type Reporter struct {
 	format Format
 	writer io.Writer
+	mu     sync.Mutex
 }
 
 // New creates a new Reporter.
@@ -36,6 +38,8 @@ func New(format Format, writer io.Writer) *Reporter {
 
 // StepStarted is called when a step begins execution.
 func (r *Reporter) StepStarted(step *models.Step) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
 		fmt.Fprintf(r.writer, "  ▶ %s ", step.ID)
@@ -54,6 +58,8 @@ func (r *Reporter) StepStarted(step *models.Step) {
 
 // StepCompleted is called when a step finishes.
 func (r *Reporter) StepCompleted(result *models.StepResult) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
 		icon := statusIcon(result.Status)
@@ -85,6 +91,8 @@ func (r *Reporter) StepCompleted(result *models.StepResult) {
 
 // PipelineStarted is called when the pipeline begins.
 func (r *Reporter) PipelineStarted(p *models.Pipeline) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
 		fmt.Fprintf(r.writer, "▶ Running %s (%d steps)\n", p.Name, len(p.Steps))
@@ -101,6 +109,8 @@ func (r *Reporter) PipelineStarted(p *models.Pipeline) {
 
 // PipelineCompleted is called when the pipeline finishes.
 func (r *Reporter) PipelineCompleted(result *models.PipelineResult) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
 		icon := statusIcon(result.Status)

@@ -125,10 +125,10 @@ func (e *Executor) executeShell(ctx context.Context, step *models.Step, env []st
 
 	// Write to configured output
 	if e.Stdout != nil {
-		e.Stdout.Write(stdout.Bytes())
+		_, _ = e.Stdout.Write(stdout.Bytes())
 	}
 	if e.Stderr != nil && stderr.Len() > 0 {
-		e.Stderr.Write(stderr.Bytes())
+		_, _ = e.Stderr.Write(stderr.Bytes())
 	}
 
 	return combined, err
@@ -172,7 +172,7 @@ func (e *Executor) executeHTTP(ctx context.Context, step *models.Step, env []str
 	if err != nil {
 		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	output, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -209,10 +209,10 @@ func (e *Executor) executeScript(ctx context.Context, step *models.Step, env []s
 	}
 
 	if e.Stdout != nil {
-		e.Stdout.Write(stdout.Bytes())
+		_, _ = e.Stdout.Write(stdout.Bytes())
 	}
 	if e.Stderr != nil && stderr.Len() > 0 {
-		e.Stderr.Write(stderr.Bytes())
+		_, _ = e.Stderr.Write(stderr.Bytes())
 	}
 
 	return combined, err

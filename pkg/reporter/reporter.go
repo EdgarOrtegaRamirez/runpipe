@@ -42,16 +42,16 @@ func (r *Reporter) StepStarted(step *models.Step) {
 	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
-		fmt.Fprintf(r.writer, "  ▶ %s ", step.ID)
+		_, _ = fmt.Fprintf(r.writer, "  ▶ %s ", step.ID)
 	case FormatText:
-		fmt.Fprintf(r.writer, "\n━━━ Step: %s (%s) ━━━\n", step.ID, step.Type)
+		_, _ = fmt.Fprintf(r.writer, "\n━━━ Step: %s (%s) ━━━\n", step.ID, step.Type)
 		if step.Name != "" {
-			fmt.Fprintf(r.writer, "  Name: %s\n", step.Name)
+			_, _ = fmt.Fprintf(r.writer, "  Name: %s\n", step.Name)
 		}
 		if step.Command != "" {
-			fmt.Fprintf(r.writer, "  Command: %s\n", step.Command)
+			_, _ = fmt.Fprintf(r.writer, "  Command: %s\n", step.Command)
 		} else if step.URL != "" {
-			fmt.Fprintf(r.writer, "  URL: %s %s\n", step.Method, step.URL)
+			_, _ = fmt.Fprintf(r.writer, "  URL: %s %s\n", step.Method, step.URL)
 		}
 	}
 }
@@ -64,16 +64,16 @@ func (r *Reporter) StepCompleted(result *models.StepResult) {
 	case FormatCompact:
 		icon := statusIcon(result.Status)
 		dur := formatDuration(result.Duration)
-		fmt.Fprintf(r.writer, "%s (%s)\n", icon, dur)
+		_, _ = fmt.Fprintf(r.writer, "%s (%s)\n", icon, dur)
 	case FormatText:
 		icon := statusIcon(result.Status)
-		fmt.Fprintf(r.writer, "  %s Status: %s\n", icon, result.Status)
-		fmt.Fprintf(r.writer, "  ⏱  Duration: %s\n", formatDuration(result.Duration))
+		_, _ = fmt.Fprintf(r.writer, "  %s Status: %s\n", icon, result.Status)
+		_, _ = fmt.Fprintf(r.writer, "  ⏱  Duration: %s\n", formatDuration(result.Duration))
 		if result.Attempts > 1 {
-			fmt.Fprintf(r.writer, "  🔄 Attempts: %d\n", result.Attempts)
+			_, _ = fmt.Fprintf(r.writer, "  🔄 Attempts: %d\n", result.Attempts)
 		}
 		if result.Error != "" {
-			fmt.Fprintf(r.writer, "  ❌ Error: %s\n", result.Error)
+			_, _ = fmt.Fprintf(r.writer, "  ❌ Error: %s\n", result.Error)
 		}
 		if result.Output != "" && result.Status != models.StatusSuccess {
 			lines := strings.Split(result.Output, "\n")
@@ -81,9 +81,9 @@ func (r *Reporter) StepCompleted(result *models.StepResult) {
 				lines = lines[:10]
 				lines = append(lines, "... (truncated)")
 			}
-			fmt.Fprintf(r.writer, "  Output:\n")
+			_, _ = fmt.Fprintf(r.writer, "  Output:\n")
 			for _, line := range lines {
-				fmt.Fprintf(r.writer, "    %s\n", line)
+				_, _ = fmt.Fprintf(r.writer, "    %s\n", line)
 			}
 		}
 	}
@@ -95,15 +95,15 @@ func (r *Reporter) PipelineStarted(p *models.Pipeline) {
 	defer r.mu.Unlock()
 	switch r.format {
 	case FormatCompact:
-		fmt.Fprintf(r.writer, "▶ Running %s (%d steps)\n", p.Name, len(p.Steps))
+		_, _ = fmt.Fprintf(r.writer, "▶ Running %s (%d steps)\n", p.Name, len(p.Steps))
 	case FormatText:
-		fmt.Fprintf(r.writer, "╔══════════════════════════════════════╗\n")
-		fmt.Fprintf(r.writer, "║  RunPipe: %s\n", p.Name)
+		_, _ = fmt.Fprintf(r.writer, "╔══════════════════════════════════════╗\n")
+		_, _ = fmt.Fprintf(r.writer, "║  RunPipe: %s\n", p.Name)
 		if p.Description != "" {
-			fmt.Fprintf(r.writer, "║  %s\n", p.Description)
+			_, _ = fmt.Fprintf(r.writer, "║  %s\n", p.Description)
 		}
-		fmt.Fprintf(r.writer, "║  Steps: %d\n", len(p.Steps))
-		fmt.Fprintf(r.writer, "╚══════════════════════════════════════╝\n")
+		_, _ = fmt.Fprintf(r.writer, "║  Steps: %d\n", len(p.Steps))
+		_, _ = fmt.Fprintf(r.writer, "╚══════════════════════════════════════╝\n")
 	}
 }
 
@@ -115,19 +115,19 @@ func (r *Reporter) PipelineCompleted(result *models.PipelineResult) {
 	case FormatCompact:
 		icon := statusIcon(result.Status)
 		dur := formatDuration(result.Duration)
-		fmt.Fprintf(r.writer, "%s Completed in %s (%d/%d passed)\n",
+		_, _ = fmt.Fprintf(r.writer, "%s Completed in %s (%d/%d passed)\n",
 			icon, dur, result.PassedSteps, result.TotalSteps)
 	case FormatText:
-		fmt.Fprintf(r.writer, "\n╔══════════════════════════════════════╗\n")
-		fmt.Fprintf(r.writer, "║  Pipeline Result: %s\n", result.Status)
-		fmt.Fprintf(r.writer, "║  Duration: %s\n", formatDuration(result.Duration))
-		fmt.Fprintf(r.writer, "║  Steps: %d total, %d passed, %d failed, %d skipped\n",
+		_, _ = fmt.Fprintf(r.writer, "\n╔══════════════════════════════════════╗\n")
+		_, _ = fmt.Fprintf(r.writer, "║  Pipeline Result: %s\n", result.Status)
+		_, _ = fmt.Fprintf(r.writer, "║  Duration: %s\n", formatDuration(result.Duration))
+		_, _ = fmt.Fprintf(r.writer, "║  Steps: %d total, %d passed, %d failed, %d skipped\n",
 			result.TotalSteps, result.PassedSteps, result.FailedSteps, result.SkippedSteps)
-		fmt.Fprintf(r.writer, "╚══════════════════════════════════════╝\n")
+		_, _ = fmt.Fprintf(r.writer, "╚══════════════════════════════════════╝\n")
 	case FormatJSON:
 		enc := json.NewEncoder(r.writer)
 		enc.SetIndent("", "  ")
-		enc.Encode(result)
+		_ = enc.Encode(result)
 	}
 }
 
@@ -160,5 +160,5 @@ func formatDuration(d float64) string {
 	if d < 60 {
 		return fmt.Sprintf("%.1fs", d)
 	}
-	return fmt.Sprintf("%s", time.Duration(d*float64(time.Second)).Round(time.Second))
+	return time.Duration(d*float64(time.Second)).Round(time.Second).String()
 }

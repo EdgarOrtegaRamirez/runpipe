@@ -160,5 +160,5 @@ func formatDuration(d float64) string {
 	if d < 60 {
 		return fmt.Sprintf("%.1fs", d)
 	}
-	return time.Duration(d*float64(time.Second)).Round(time.Second).String()
+	return time.Duration(d * float64(time.Second)).Round(time.Second).String()
 }
